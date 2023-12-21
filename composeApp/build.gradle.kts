@@ -5,6 +5,9 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+
+    kotlin("plugin.serialization").version("1.9.21")
+    id("com.squareup.sqldelight").version("1.5.5")
 }
 
 kotlin {
@@ -17,6 +20,12 @@ kotlin {
     }
     
     jvm("desktop")
+
+
+    val coroutinesVersion = "1.7.3"
+    val ktorVersion = "2.3.7"
+    val sqlDelightVersion = "1.5.5"
+    val dateTimeVersion = "0.4.1"
     
     sourceSets {
         val desktopMain by getting
@@ -24,6 +33,9 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+
+            implementation("io.ktor:ktor-client-android:$ktorVersion")
+            implementation("com.squareup.sqldelight:android-driver:$sqlDelightVersion")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -34,7 +46,14 @@ kotlin {
             implementation(compose.components.resources)
             implementation(projects.shared)
 
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+            implementation("io.ktor:ktor-client-core:$ktorVersion")
+            implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+            implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
+            implementation("com.squareup.sqldelight:sqlite-driver:$sqlDelightVersion")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion")
+
 
         }
         desktopMain.dependencies {
@@ -76,6 +95,10 @@ android {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
+dependencies {
+    implementation(project(mapOf("path" to ":composeApp")))
+    implementation(project(mapOf("path" to ":composeApp")))
+}
 
 compose.desktop {
     application {
@@ -86,5 +109,11 @@ compose.desktop {
             packageName = "org.teka.project"
             packageVersion = "1.0.0"
         }
+    }
+}
+
+sqldelight {
+    database("AppDatabase") {
+        packageName = "com.teka.kmm.shared.cache"
     }
 }
