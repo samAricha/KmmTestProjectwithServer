@@ -37,6 +37,8 @@ kotlin {
             implementation("io.ktor:ktor-client-android:$ktorVersion")
             implementation("com.squareup.sqldelight:android-driver:$sqlDelightVersion")
         }
+        val koin_version = "3.5.0"
+        val koin_compose_version = "1.1.0"
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -53,6 +55,10 @@ kotlin {
             implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
             implementation("com.squareup.sqldelight:sqlite-driver:$sqlDelightVersion")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion")
+
+            //koin
+            implementation ("io.insert-koin:koin-core:$koin_version")
+            implementation ("io.insert-koin:koin-compose:$koin_compose_version")
 
 
         }
